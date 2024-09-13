@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Group;
+
 use Illuminate\Http\Request;
+
+use App\Models\Group;
+
+use App\Models\User;
+
+use App\Http\Resources\UserResource;
 
 class UserController extends Controller
 {
@@ -12,15 +17,21 @@ class UserController extends Controller
     public function index()
     {
         $users = User::with('group', 'orders')->get();
-        return view('users.index', compact('users'));
+
+        $users = User::all(); 
+        return response()->json([
+            'data' => UserResource::collection($users),
+            'message' => 'users retrieved successfully',
+        ], 200);
+        // return view('users.index', compact('users'));
     }
 
 
-    public function create()
-    {
-        $groups = Group::all();
-        return view('users.create', compact('groups'));
-    }
+    // public function create()
+    // {
+    //     $groups = Group::all();
+    //     return view('users.create', compact('groups'));
+    // }
 
 
     public function store(Request $request)
@@ -39,19 +50,23 @@ class UserController extends Controller
 
         User::create($validatedData);
 
-        return redirect()->route('users.index')->with('success', 'User created successfully.');
+        return response()->json([
+            'success' => true,
+            'data' => new UserResource($user),
+            'message' => 'User created successfully',
+        ], 201);
     }
 
     public function show(User $user)
     {
-        return view('users.show', compact('user'));
+       return response()->json(new UserResource($user), 200);
     }
 
-    public function edit(User $user)
-    {
-        $groups = Group::all();
-        return view('users.edit', compact('user', 'groups'));
-    }
+    // public function edit(User $user)
+    // {
+    //     $groups = Group::all();
+    //     return view('users.edit', compact('user', 'groups'));
+    // }
 
     public function update(Request $request, User $user)
     {
@@ -70,13 +85,20 @@ class UserController extends Controller
         }
 
         $user->update($validatedData);
-        return redirect()->route('users.index')->with('success', 'User updated successfully.');
+        return response()->json([
+            'success' => true,
+            'data' => new UserResource($user),
+            'message' => 'User updated successfully',
+        ], 200);
     }
 
 
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+        return response()->json([
+            'success' => true,
+            'message' => 'User deleted successfully',
+        ], 200);
     }
 }

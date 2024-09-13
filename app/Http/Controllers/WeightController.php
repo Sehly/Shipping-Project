@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Weight;
+
 use Illuminate\Http\Request;
+
+use App\Http\Resources\WeightResource;
+
 
 class WeightController extends Controller
 {
@@ -15,7 +19,11 @@ class WeightController extends Controller
     public function index()
     {
         $weights = Weight::all();
-        return view('weights.index', compact('weights'));
+
+        return response()->json([
+            'data' => WeightResource::collection($weights),
+            'message' => 'weights retrieved successfully',
+        ], 200);
     }
 
     /**
@@ -23,10 +31,12 @@ class WeightController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        return view('weights.create');
-    }
+
+
+    // public function create()
+    // {
+    //     return view('weights.create');
+    // }
 
     /**
      * Store a newly created weight in storage.
@@ -36,15 +46,20 @@ class WeightController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'max_weight' => 'required|numeric',
             'cost_per_unit' => 'required|numeric',
         ]);
 
-        Weight::create($request->all());
+        Weight::create($validatedData);
 
-        return redirect()->route('weights.index')
-            ->with('success', 'Weight created successfully.');
+        return response()->json([
+            'success' => true,
+            'data' => new WeightResource($weight),
+            'message' => 'Weight created successfully',
+        ], 201);
+        // return redirect()->route('weights.index')
+        //     ->with('success', 'Weight created successfully.');
     }
 
     /**
@@ -55,7 +70,7 @@ class WeightController extends Controller
      */
     public function show(Weight $weight)
     {
-        return view('weights.show', compact('weight'));
+        return response()->json(new WeightResource($weight), 200);
     }
 
     /**
@@ -64,10 +79,12 @@ class WeightController extends Controller
      * @param \App\Models\Weight $weight
      * @return \Illuminate\Http\Response
      */
-    public function edit(Weight $weight)
-    {
-        return view('weights.edit', compact('weight'));
-    }
+
+
+    // public function edit(Weight $weight)
+    // {
+    //     return view('weights.edit', compact('weight'));
+    // }
 
     /**
      * Update the specified weight in storage.
@@ -78,15 +95,20 @@ class WeightController extends Controller
      */
     public function update(Request $request, Weight $weight)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'max_weight' => 'required|numeric',
             'cost_per_unit' => 'required|numeric',
         ]);
 
-        $weight->update($request->all());
+        $weight->update($validatedData);
 
-        return redirect()->route('weights.index')
-            ->with('success', 'Weight updated successfully.');
+        return response()->json([
+            'success' => true,
+            'data' => new WeightResource($weight),
+            'message' => 'Weight updated successfully',
+        ], 200);
+        // return redirect()->route('weights.index')
+        //     ->with('success', 'Weight updated successfully.');
     }
 
     /**
@@ -99,7 +121,11 @@ class WeightController extends Controller
     {
         $weight->delete();
 
-        return redirect()->route('weights.index')
-            ->with('success', 'Weight deleted successfully.');
+        return response()->json([
+            'success' => true,
+            'message' => 'Weight deleted successfully',
+        ], 200);
+        // return redirect()->route('weights.index')
+        //     ->with('success', 'Weight deleted successfully.');
     }
 }

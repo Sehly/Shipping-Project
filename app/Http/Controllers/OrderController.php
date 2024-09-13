@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
-use App\Models\Branch;
-use App\Models\Region;
-use App\Models\User;
 use Illuminate\Http\Request;
+
+use App\Models\Order;
+
+use App\Models\Branch;
+
+use App\Models\Region;
+
+use App\Models\User;
+
+use App\Http\Resources\OrderResource;
 
 class OrderController extends Controller
 {
@@ -18,7 +24,11 @@ class OrderController extends Controller
     public function index()
     {
         $orders = Order::with(['branch', 'region', 'user'])->get();
-        return view('orders.index', compact('orders'));
+        return response()->json([
+            'data' => OrderResource::collection($orders),
+            'message' => 'orders retrieved successfully',
+        ], 200);
+        // return view('orders.index', compact('orders'));
     }
 
     /**
@@ -26,13 +36,15 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        $branches = Branch::all();
-        $regions = Region::all();
-        $users = User::all();
-        return view('orders.create', compact('branches', 'regions', 'users'));
-    }
+
+
+    // public function create()
+    // {
+    //     $branches = Branch::all();
+    //     $regions = Region::all();
+    //     $users = User::all();
+    //     return view('orders.create', compact('branches', 'regions', 'users'));
+    // }
 
     /**
      * Store a newly created order in storage.
@@ -40,9 +52,12 @@ class OrderController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
+
+
+
     public function store(Request $request)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'status' => 'required|string',
             'weight' => 'required|numeric',
             'created_date' => 'required|date',
@@ -50,11 +65,30 @@ class OrderController extends Controller
             'region_id' => 'required|exists:regions,id',
             'user_id' => 'required|exists:users,id',
         ]);
+        $max_weight=15;
+        $weight =  $request->weight ;
+        $cost=45;
+        if($weight > $max_weight){
+            $cost = ( ($weight - $max_weight) * 5 ) + $cost ;
+        }
 
-        Order::create($request->all());
+        $order = Order::create([
+            'status' => $request->status,
+            'weight' => $request->weight,
+            'created_date' => $request->created_date,
+            'cost' => $cost,
+            'max_weight' => $max_weight,
+            'branch_id' => $request->branch_id,
+            'region_id' => $request->region_id,
+            'user_id' => $request->user_id,
+        ]);
+ 
 
-        return redirect()->route('orders.index')
-            ->with('success', 'Order created successfully.');
+        return response()->json([
+            'success' => true,
+            'data' => new OrderResource($order),
+            'message' => 'Order created successfully',
+        ], 201);
     }
 
     /**
@@ -65,7 +99,7 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        return view('orders.show', compact('order'));
+        return response()->json(new OrderResource($order), 200);
     }
 
     /**
@@ -74,13 +108,15 @@ class OrderController extends Controller
      * @param \App\Models\Order $order
      * @return \Illuminate\Http\Response
      */
-    public function edit(Order $order)
-    {
-        $branches = Branch::all();
-        $regions = Region::all();
-        $users = User::all();
-        return view('orders.edit', compact('order', 'branches', 'regions', 'users'));
-    }
+
+
+    // public function edit(Order $order)
+    // {
+    //     $branches = Branch::all();
+    //     $regions = Region::all();
+    //     $users = User::all();
+    //     return view('orders.edit', compact('order', 'branches', 'regions', 'users'));
+    // }
 
     /**
      * Update the specified order in storage.
@@ -102,8 +138,13 @@ class OrderController extends Controller
 
         $order->update($request->all());
 
-        return redirect()->route('orders.index')
-            ->with('success', 'Order updated successfully.');
+        return response()->json([
+            'success' => true,
+            'data' => new OrderResource($order),
+            'message' => 'Order updated successfully',
+        ], 200);
+        // return redirect()->route('orders.index')
+        //     ->with('success', 'Order updated successfully.');
     }
 
     /**
@@ -116,7 +157,11 @@ class OrderController extends Controller
     {
         $order->delete();
 
-        return redirect()->route('orders.index')
-            ->with('success', 'Order deleted successfully.');
+        return response()->json([
+            'success' => true,
+            'message' => 'Order deleted successfully',
+        ], 200);
+        // return redirect()->route('orders.index')
+        //     ->with('success', 'Order deleted successfully.');
     }
 }

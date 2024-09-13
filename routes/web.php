@@ -15,22 +15,21 @@ use App\Http\Controllers\WeightController;
 use App\Http\Controllers\OrderController;
 
 
-
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('users', UserController::class);
+// Route::resource('users', UserController::class);
 
-Route::resource('groups', GroupController::class);
+// Route::resource('groups', GroupController::class);
 
-Route::resource('branches', BranchController::class);
+// Route::resource('branches', BranchController::class);
 
-Route::resource('regions', RegionController::class);
+// Route::resource('regions', RegionController::class);
 
-Route::resource('weights', WeightController::class);
+// Route::resource('weights', WeightController::class);
 
-Route::resource('orders', OrderController::class);
+// Route::resource('orders', OrderController::class);
 
 
 

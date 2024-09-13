@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Branch;
 use Illuminate\Http\Request;
+
+use App\Models\Branch;
+
+use App\Http\Resources\BranchResource;
+
 
 class BranchController extends Controller
 {
@@ -15,7 +19,10 @@ class BranchController extends Controller
     public function index()
     {
         $branches = Branch::all();
-        return view('branches.index', compact('branches'));
+        return response()->json([
+            'data' => BranchResource::collection($branches),
+            'message' => 'branches retrieved successfully',
+        ], 200);
     }
 
     /**
@@ -23,10 +30,11 @@ class BranchController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        return view('branches.create');
-    }
+
+    // public function create()
+    // {
+    //     return view('branches.create');
+    // }
 
     /**
      * Store a newly created branch in storage.
@@ -36,16 +44,18 @@ class BranchController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validatedDate = $request->validate([
             'name' => 'required|string|max:255',
             'location' => 'required|string|max:255',
-            // Add validation rules as needed
         ]);
 
-        Branch::create($request->all());
+        Branch::create($validatedDate);
 
-        return redirect()->route('branches.index')
-            ->with('success', 'Branch created successfully.');
+        return response()->json([
+            'success' => true,
+            'data' => new BranchResource($branch),
+            'message' => 'Branch created successfully',
+        ], 201);
     }
 
     /**
@@ -56,7 +66,7 @@ class BranchController extends Controller
      */
     public function show(Branch $branch)
     {
-        return view('branches.show', compact('branch'));
+        return response()->json(new BranchResource($branch), 200);
     }
 
     /**
@@ -65,10 +75,12 @@ class BranchController extends Controller
      * @param \App\Models\Branch $branch
      * @return \Illuminate\Http\Response
      */
-    public function edit(Branch $branch)
-    {
-        return view('branches.edit', compact('branch'));
-    }
+
+
+    // public function edit(Branch $branch)
+    // {
+    //     return view('branches.edit', compact('branch'));
+    // }
 
     /**
      * Update the specified branch in storage.
@@ -79,16 +91,21 @@ class BranchController extends Controller
      */
     public function update(Request $request, Branch $branch)
     {
-        $request->validate([
+        $validatedDated = $request->validate([
             'name' => 'required|string|max:255',
             'location' => 'required|string|max:255',
 
         ]);
 
-        $branch->update($request->all());
+        $branch->update($validatedDated);
 
-        return redirect()->route('branches.index')
-            ->with('success', 'Branch updated successfully.');
+        // return redirect()->route('branches.index')
+        //     ->with('success', 'Branch updated successfully.');
+        return response()->json([
+            'success' => true,
+            'data' => new BranchResource($branch),
+            'message' => 'Branch updated successfully',
+        ], 200);
     }
 
     /**
@@ -101,7 +118,12 @@ class BranchController extends Controller
     {
         $branch->delete();
 
-        return redirect()->route('branches.index')
-            ->with('success', 'Branch deleted successfully.');
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Branch deleted successfully',
+        ], 200);
+                // return redirect()->route('branches.index')
+        //     ->with('success', 'Branch deleted successfully.');
     }
 }

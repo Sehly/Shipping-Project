@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Region;
 use Illuminate\Http\Request;
 
+use App\Http\Resources\RegionResource;
+
 class RegionController extends Controller
 {
     /**
@@ -15,7 +17,12 @@ class RegionController extends Controller
     public function index()
     {
         $regions = Region::all();
-        return view('regions.index', compact('regions'));
+
+        return response()->json([
+            'data' => RegionResource::collection($regions),
+            'message' => 'regions retrieved successfully',
+        ], 200);
+        // return view('regions.index', compact('regions'));
     }
 
     /**
@@ -23,10 +30,12 @@ class RegionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        return view('regions.create');
-    }
+
+
+    // public function create()
+    // {
+    //     return view('regions.create');
+    // }
 
     /**
      * Store a newly created region in storage.
@@ -36,16 +45,21 @@ class RegionController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'governorate' => 'required|string|max:255',
         ]);
 
-        Region::create($request->all());
+        Region::create($validatedData);
 
-        return redirect()->route('regions.index')
-            ->with('success', 'Region created successfully.');
+        return response()->json([
+            'success' => true,
+            'data' => new RegionResource($region),
+            'message' => 'Region created successfully',
+        ], 201);
+        // return redirect()->route('regions.index')
+        //     ->with('success', 'Region created successfully.');
     }
 
     /**
@@ -56,7 +70,7 @@ class RegionController extends Controller
      */
     public function show(Region $region)
     {
-        return view('regions.show', compact('region'));
+        return response()->json(new RegionResource($region), 200);
     }
 
     /**
@@ -65,10 +79,12 @@ class RegionController extends Controller
      * @param \App\Models\Region $region
      * @return \Illuminate\Http\Response
      */
-    public function edit(Region $region)
-    {
-        return view('regions.edit', compact('region'));
-    }
+
+
+    // public function edit(Region $region)
+    // {
+    //     return view('regions.edit', compact('region'));
+    // }
 
     /**
      * Update the specified region in storage.
@@ -87,8 +103,13 @@ class RegionController extends Controller
 
         $region->update($request->all());
 
-        return redirect()->route('regions.index')
-            ->with('success', 'Region updated successfully.');
+        return response()->json([
+            'success' => true,
+            'data' => new RegionResource($region),
+            'message' => 'Region updated successfully',
+        ], 200);
+        // return redirect()->route('regions.index')
+        //     ->with('success', 'Region updated successfully.');
     }
 
     /**
@@ -100,8 +121,12 @@ class RegionController extends Controller
     public function destroy(Region $region)
     {
         $region->delete();
-
-        return redirect()->route('regions.index')
-            ->with('success', 'Region deleted successfully.');
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Region deleted successfully',
+        ], 200);
+        // return redirect()->route('regions.index')
+        //     ->with('success', 'Region deleted successfully.');
     }
 }

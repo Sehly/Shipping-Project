@@ -11,7 +11,6 @@ class User extends Model
 
     protected $fillable = ['name' , 'username' , 'email' , 'password' , 'role' , 'company_name' , 'group_id'];
 
-
         public function group()
         {
             return $this->belongsTo(Group::class);

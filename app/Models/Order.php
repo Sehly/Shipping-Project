@@ -9,7 +9,7 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['status' , 'weight' , 'created_date' , 'branch_id' , 'region_id' , 'user_id'];
+    protected $fillable = ['status' , 'weight' , 'created_date' , 'branch_id' , 'region_id' , 'user_id' , 'cost' , 'max_weight'];
 
     public function branch()
     {
