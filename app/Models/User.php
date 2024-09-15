@@ -3,11 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+// use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-class User extends Model
+
+
+
+class User extends Authenticatable
 {
-    use HasFactory;
+    use HasApiTokens, Notifiable;
+    // use HasFactory;
 
     protected $fillable = ['name' , 'username' , 'email' , 'password' , 'role' , 'company_name' , 'group_id'];
 
@@ -20,4 +28,10 @@ class User extends Model
         {
             return $this->hasMany(Order::class);
         }
+
+        public function hasRole($role)
+        {
+            return $this->role === $role;
+        }
+
 }
