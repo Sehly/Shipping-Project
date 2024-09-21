@@ -9,8 +9,14 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['status' , 'weight' , 'created_date' , 'branch_id' , 'region_id' , 'user_id' , 'cost' , 'max_weight'];
+    protected $fillable = ['status' , 'weight' , 'cost' , 'max_weight' , 'created_date' , 'branch_id' , 'region_id' , 'user_id' , 'city_id', 'governorate_id', 'orderType' , 'clientName' , 'phone1' , 'email' , 'village', 'toVillage' , 'shippingType' , 'paymentType' , 'notes'];
+    
 
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+    
     public function branch()
     {
         return $this->belongsTo(Branch::class);
@@ -25,4 +31,15 @@ class Order extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function governorate()
+    {
+        return $this->belongsTo(Governorate::class);
+    }
+    
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
 }

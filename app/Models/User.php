@@ -17,7 +17,7 @@ class User extends Authenticatable
     use HasApiTokens, Notifiable;
     // use HasFactory;
 
-    protected $fillable = ['name' , 'username' , 'email' , 'password' , 'role' , 'company_name' , 'group_id'];
+    protected $fillable = ['name' , 'username' , 'email' , 'password' , 'role' , 'company_name' , 'group_id' ,'phone' , 'address', 'branch_id'];
 
         public function group()
         {
@@ -29,9 +29,9 @@ class User extends Authenticatable
             return $this->hasMany(Order::class);
         }
 
-        public function hasRole($role)
+        public function branches()
         {
-            return $this->role === $role;
+            return $this->belongsTo(Branch::class);
         }
 
 }

@@ -24,6 +24,18 @@ class OrderResource extends JsonResource
             'region_id'=> $this->region_id ,
             'cost'=> $this->cost,
             'max_weight'=> $this->max_weight,
+            'city_id' => $this->city_id,
+            'governorate_id' => $this->governorate_id,
+            'orderType' => $this->orderType,
+            'clientName' => $this->clientName,
+            'phone1' => $this->phone1,
+            'email' => $this->email,
+            'village' => $this->village,
+            'toVillage' => $this->toVillage,
+            'shippingType' => $this->shippingType,
+            'paymentType' => $this->paymentType,
+            'notes' => $this->notes,
+            'products' => ProductResource::collection($this->whenLoaded('products')), 
         ];
     }
 }

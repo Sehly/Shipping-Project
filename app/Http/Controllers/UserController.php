@@ -1,38 +1,26 @@
 <?php
 
+
 namespace App\Http\Controllers;
 
-
 use Illuminate\Http\Request;
-
 use App\Models\Group;
-
+use App\Models\Branch;
 use App\Models\User;
-
 use App\Http\Resources\UserResource;
+
 
 class UserController extends Controller
 {
-
     public function index()
     {
-        $users = User::with('group', 'orders')->get();
+        $users = User::with('group', 'orders', 'branches')->get();
 
-        $users = User::all(); 
         return response()->json([
             'data' => UserResource::collection($users),
-            'message' => 'users retrieved successfully',
+            'message' => 'Users retrieved successfully',
         ], 200);
-        // return view('users.index', compact('users'));
     }
-
-
-    // public function create()
-    // {
-    //     $groups = Group::all();
-    //     return view('users.create', compact('groups'));
-    // }
-
 
     public function store(Request $request)
     {
@@ -43,12 +31,15 @@ class UserController extends Controller
             'password' => 'required|string|min:8',
             'role' => 'required|in:admin,employee,trader,deliveryman',
             'group_id' => 'required|exists:groups,id',
+            'phone' => 'required|string|min:10',
+            'address' => 'required|string|min:4',
+            'branch_id' => 'required|exists:branches,id',
             'company_name' => 'nullable|string|max:255'
         ]);
 
         $validatedData['password'] = bcrypt($validatedData['password']);
 
-        User::create($validatedData);
+        $user = User::create($validatedData);
 
         return response()->json([
             'success' => true,
@@ -59,14 +50,8 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-       return response()->json(new UserResource($user), 200);
+        return response()->json(new UserResource($user), 200);
     }
-
-    // public function edit(User $user)
-    // {
-    //     $groups = Group::all();
-    //     return view('users.edit', compact('user', 'groups'));
-    // }
 
     public function update(Request $request, User $user)
     {
@@ -77,6 +62,9 @@ class UserController extends Controller
             'password' => 'nullable|string|min:8',
             'role' => 'required|in:admin,employee,trader,deliveryman',
             'group_id' => 'required|exists:groups,id',
+            'phone' => 'required|string|min:10',
+            'address' => 'required|string|min:4',
+            'branch_id' => 'required|exists:branches,id',
             'company_name' => 'nullable|string|max:255'
         ]);
 
@@ -85,6 +73,7 @@ class UserController extends Controller
         }
 
         $user->update($validatedData);
+
         return response()->json([
             'success' => true,
             'data' => new UserResource($user),
@@ -92,13 +81,14 @@ class UserController extends Controller
         ], 200);
     }
 
-
     public function destroy(User $user)
     {
         $user->delete();
+
         return response()->json([
             'success' => true,
             'message' => 'User deleted successfully',
         ], 200);
     }
 }
+

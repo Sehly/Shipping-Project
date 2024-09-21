@@ -6,17 +6,31 @@ use Illuminate\Http\Request;
 
 use App\Models\Group;
 
+use App\Models\Permission;
+
 use App\Http\Resources\GroupResource;
 
 class GroupController extends Controller
 {
+    
+    
+    public function assignPermissions(Request $request, $groupId)
+    {
+        $group = Group::findOrFail($groupId);
+        
+        $permissions = Permission::whereIn('permissions_name', $request->input('permissions'))->get();
+
+        $group->permissions()->sync($permissions);
+
+        return response()->json(['message' => 'Permissions assigned successfully.']);
+    }
+    
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        // $groups = Group::with('users')->get(); 
-        // return view('groups.index', compact('groups'));
+
         $groups = Group::all(); 
         
         return response()->json([

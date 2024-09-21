@@ -5,18 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Branch extends Model
+class City extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name' , 'location'];
-
+    protected $fillable = [
+        'city_name',
+        'original_cost',
+        'pickup_cost',
+        'governorate_id',
+    ];
+    
     public function orders()
     {
         return $this->hasMany(Order::class);
     }
-    public function users()
+
+    public function governorate()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsTo(Governorate::class);
     }
 }

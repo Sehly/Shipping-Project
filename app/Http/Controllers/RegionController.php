@@ -22,7 +22,7 @@ class RegionController extends Controller
             'data' => RegionResource::collection($regions),
             'message' => 'regions retrieved successfully',
         ], 200);
-        // return view('regions.index', compact('regions'));
+
     }
 
     /**
@@ -58,8 +58,7 @@ class RegionController extends Controller
             'data' => new RegionResource($region),
             'message' => 'Region created successfully',
         ], 201);
-        // return redirect()->route('regions.index')
-        //     ->with('success', 'Region created successfully.');
+
     }
 
     /**
@@ -108,8 +107,7 @@ class RegionController extends Controller
             'data' => new RegionResource($region),
             'message' => 'Region updated successfully',
         ], 200);
-        // return redirect()->route('regions.index')
-        //     ->with('success', 'Region updated successfully.');
+
     }
 
     /**
@@ -126,7 +124,6 @@ class RegionController extends Controller
             'success' => true,
             'message' => 'Region deleted successfully',
         ], 200);
-        // return redirect()->route('regions.index')
-        //     ->with('success', 'Region deleted successfully.');
+
     }
 }

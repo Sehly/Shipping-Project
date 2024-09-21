@@ -11,6 +11,12 @@ class Group extends Model
 
     protected $fillable = ['name' , 'permissions'];
 
+
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, 'group_permission');
+    }
+    
     public function users()
     {
         return $this->hasMany(User::class);

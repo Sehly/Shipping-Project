@@ -99,8 +99,6 @@ class BranchController extends Controller
 
         $branch->update($validatedDated);
 
-        // return redirect()->route('branches.index')
-        //     ->with('success', 'Branch updated successfully.');
         return response()->json([
             'success' => true,
             'data' => new BranchResource($branch),
@@ -123,7 +121,6 @@ class BranchController extends Controller
             'success' => true,
             'message' => 'Branch deleted successfully',
         ], 200);
-                // return redirect()->route('branches.index')
-        //     ->with('success', 'Branch deleted successfully.');
+
     }
 }

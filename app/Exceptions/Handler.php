@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
+
 class Handler extends ExceptionHandler
 {
     /**
@@ -27,4 +28,48 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    // public function render($request, Throwable $exception)
+    // {
+    //     // Handle AuthenticationException
+    //     if ($exception instanceof AuthenticationException) {
+    //         // If the request expects JSON, return a JSON response
+    //         if ($request->expectsJson()) {
+    //             return response()->json(['message' => 'You must be logged in to access this resource.'], 401);
+    //         }
+    
+    //         // Otherwise, redirect to login page
+    //         return redirect()->guest(route('login'));
+    //     }
+    
+    //     // Handle RouteNotFoundException (typically when route authentication fails)
+    //     if ($exception instanceof RouteNotFoundException) {
+    //         // Check if it's an API request expecting JSON
+    //         if ($request->expectsJson()) {
+    //             return response()->json(['message' => 'Resource not found.'], 404);
+    //         }
+    
+    //         // For non-JSON requests, return a 404 view or response
+    //         return response()->view('errors.404', [], 404);
+    //     }
+    
+    //     // For all other exceptions, use the default Laravel behavior
+    //     return parent::render($request, $exception);
+    // }
+    
+    // public function render($request, Exception $exception)
+    // {
+        
+    //     if ($exception instanceof AuthenticationException) {
+    //         return response()->json(['message' => 'You must be logged in to access this resource.'], 401);
+    //     }
+
+        
+    //     if ($exception instanceof RouteNotFoundException) {
+    //         return response()->json(['message' => 'Resource not found.'], 404);
+    //     }
+
+    //     return parent::render($request, $exception);
+    // }
+
 }
