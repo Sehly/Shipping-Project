@@ -55,10 +55,10 @@ class GroupController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255|unique:groups',
-            'permissions' => 'required|string', 
+            // 'permissions' => 'required|string', 
         ]);
 
-        Group::create($validatedData);
+        $group = Group::create($validatedData);
 
         return response()->json([
             'success' => true,
@@ -92,7 +92,7 @@ class GroupController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255|unique:groups,name,' . $group->id,
-            'permissions' => 'required|string',
+            // 'permissions' => 'required|string',
         ]);
 
         $group->update($validatedData);

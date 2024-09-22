@@ -51,7 +51,7 @@ class WeightController extends Controller
             'cost_per_unit' => 'required|numeric',
         ]);
 
-        Weight::create($validatedData);
+        $weight = Weight::create($validatedData);
 
         return response()->json([
             'success' => true,

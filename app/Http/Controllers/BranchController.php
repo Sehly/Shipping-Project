@@ -49,7 +49,7 @@ class BranchController extends Controller
             'location' => 'required|string|max:255',
         ]);
 
-        Branch::create($validatedDate);
+        $branch = Branch::create($validatedDate);
 
         return response()->json([
             'success' => true,

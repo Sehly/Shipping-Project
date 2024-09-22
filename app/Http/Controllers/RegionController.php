@@ -51,7 +51,7 @@ class RegionController extends Controller
             'governorate' => 'required|string|max:255',
         ]);
 
-        Region::create($validatedData);
+        $region = Region::create($validatedData);
 
         return response()->json([
             'success' => true,
