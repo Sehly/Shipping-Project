@@ -29,6 +29,10 @@ class UserResource extends JsonResource
             'branch_id'=> $this->branch_id,
             'created_at'=> $this->created_at ,
             'updated_at'=> $this->updated_at ,
+            'governorate_id' => $this->governorate_id,
+            'company_per' => $this->company_per,
+            'status' => $this->status,
+            'discount_type' => $this->discount_type,
         ];
     }
 }

@@ -34,7 +34,11 @@ class UserController extends Controller
             'phone' => 'required|string|min:10',
             'address' => 'required|string|min:4',
             'branch_id' => 'required|exists:branches,id',
-            'company_name' => 'nullable|string|max:255'
+            'company_name' => 'nullable|string|max:255',
+            'governorate_id' => 'nullable|exists:governorates,id',
+            'company_per' => 'nullable|numeric|min:0|max:99.99',
+            'status' => 'nullable|boolean',
+            'discount_type' => 'nullable|in:5%,10%,15%',
         ]);
 
         $validatedData['password'] = bcrypt($validatedData['password']);
@@ -65,7 +69,11 @@ class UserController extends Controller
             'phone' => 'required|string|min:10',
             'address' => 'required|string|min:4',
             'branch_id' => 'required|exists:branches,id',
-            'company_name' => 'nullable|string|max:255'
+            'company_name' => 'nullable|string|max:255',
+            'governorate_id' => 'nullable|exists:governorates,id',
+            'company_per' => 'nullable|numeric|min:0|max:99.99',
+            'status' => 'nullable|boolean',
+            'discount_type' => 'nullable|in:5%,10%,15%',
         ]);
 
         if ($request->filled('password')) {

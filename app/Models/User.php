@@ -17,7 +17,7 @@ class User extends Authenticatable
     use HasApiTokens, Notifiable;
     // use HasFactory;
 
-    protected $fillable = ['name' , 'username' , 'email' , 'password' , 'role' , 'company_name' , 'group_id' ,'phone' , 'address', 'branch_id'];
+    protected $fillable = ['name' , 'username' , 'email' , 'password' , 'role' , 'company_name' , 'group_id' ,'phone' , 'address', 'branch_id' , 'governorate_id','company_per' , 'status' , 'discount_type'];
 
         public function group()
         {
@@ -32,6 +32,10 @@ class User extends Authenticatable
         public function branches()
         {
             return $this->belongsTo(Branch::class);
+        }
+        public function governorate()
+        {
+            return $this->belongsTo(Governorate::class);
         }
 
 }
