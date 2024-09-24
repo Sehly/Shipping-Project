@@ -53,7 +53,7 @@ class Handler extends ExceptionHandler
     //         return response()->view('errors.404', [], 404);
     //     }
     
-    //     // For all other exceptions, use the default Laravel behavior
+        // For all other exceptions, use the default Laravel behavior
     //     return parent::render($request, $exception);
     // }
     

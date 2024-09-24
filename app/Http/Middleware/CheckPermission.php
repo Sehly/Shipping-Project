@@ -12,10 +12,9 @@ class CheckPermission
     public function handle(Request $request, Closure $next, $permission)
     {
         $user = $request->user();
-
+        
         if ($user && $user->group) {
             $permissions = $user->group->permissions->pluck('permissions_name')->toArray();
-
 
             if (in_array($permission, $permissions)) {
                 return $next($request);

@@ -11,6 +11,7 @@ use App\Http\Controllers\GovernorateController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\GroupPermissionController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Session\Middleware\StartSession;
 
@@ -83,11 +84,12 @@ Route::middleware(['auth:sanctum', 'permission:create'])->post('/governorates', 
 Route::middleware(['auth:sanctum', 'permission:edit'])->put('/governorates/{governorate}', [GovernorateController::class, 'update']);
 Route::middleware(['auth:sanctum', 'permission:delete'])->delete('/governorates/{governorate}', [GovernorateController::class, 'destroy']);
 
-// Route::middleware(['auth:sanctum', 'permission:view_all'])->get('/products/temporary', [ProductController::class, 'showTemporaryProducts']);
-// Route::middleware(['auth:sanctum', 'permission:create'])->post('/products/temporary', [ProductController::class, 'storeTemporaryProducts']);
-// Route::middleware(['auth:sanctum', 'permission:edit'])->put('/products/temporary/{index}', [ProductController::class, 'updateTemporaryProduct']);
-// Route::middleware(['auth:sanctum', 'permission:delete'])->delete('/products/temporary/{index}', [ProductController::class, 'deleteTemporaryProduct']);
-// Route::middleware(['auth:sanctum', 'permission:delete'])->delete('/products/temporary', [ProductController::class, 'clearTemporaryProducts']);
+
+Route::middleware(['auth:sanctum', 'permission:view_all'])->get('/group-permissions', [GroupPermissionController::class, 'index']);
+Route::middleware(['auth:sanctum', 'permission:view_row'])->get('/group-permissions/{group_id}/{permission_id}', [GroupPermissionController::class, 'show']);
+Route::middleware(['auth:sanctum', 'permission:create'])->post('/group-permissions', [GroupPermissionController::class, 'store']);
+Route::middleware(['auth:sanctum', 'permission:edit'])->put('/group-permissions/{group_id}/{permission_id}', [GroupPermissionController::class, 'update']);
+Route::middleware(['auth:sanctum', 'permission:delete'])->delete('/group-permissions/{group_id}/{permission_id}', [GroupPermissionController::class, 'destroy']);
 
 
 Route::middleware([StartSession::class])->group(function () {
